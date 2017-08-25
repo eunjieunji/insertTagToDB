@@ -17,8 +17,18 @@ module.exports = function () {
 			var tanData = tan.substring(0, tan.indexOf("g"));
 			var proteinData = protein.substring(0, protein.indexOf("g"));
 			
-			var sql = "insert into food ( " +
-			  "eng_name, kcal, fat, ten, protein" +
+			if(fatData === "") {
+				fatData = fat;
+			}
+			if(tanData === "") {
+				tanData = tan;
+			}
+			if(proteinData === "") {
+				proteinData = protein;
+			}
+			
+			var sql = "insert into tb_food ( " +
+			  "eng_name, cal, fat, carb, protein" +
 			  ") values ( " +
 			  "?, ?, ?, ?, ? " +
 			  ") ";
@@ -37,7 +47,7 @@ module.exports = function () {
 				kcal = 0;
 			}
 			var sql = "select * " + 
-					  "  from food " +
+					  "  from tb_food " +
 					  " where eng_name = ? ";
 			con.query(sql, [fname], function (err, rows, fields) {
 				if(err) {
@@ -53,30 +63,13 @@ module.exports = function () {
 				 */
 			});
 		},
-		updateFood: function (fname, kcal, fat, tan, protein) {
-			protein = protein.trim();
-			var fatData = fat.substring(0, fat.indexOf("g"));
-			var tanData = tan.substring(0, tan.indexOf("g"));
-			var proteinData = protein.substring(0, protein.indexOf("g"));
-			
-			if(fatData === "") {
-				fatData = fat;
-			}
-			if(tanData === "") {
-				tanData = tan;
-			}
-			if(proteinData === "") {
-				proteinData = protein;
-			}
-			
-			var sql = "update food " +
-					  "   set fat = ?, " +
-					  "		  ten = ?, " +
-					  "		  protein = ? " +
+		updateFood: function (fname, translatedText) {
+			var sql = "update tb_food " +
+					  "   set kor_name = ? " +
 					  "where eng_name = ? ";
 			con.query(
 				sql, 
-				[parseFloat(fatData), parseFloat(tanData), parseFloat(protein), fname],
+				[translatedText, fname],
 				function (err, result) {
 					if (err) {
 						throw err;

@@ -2,6 +2,7 @@ var request = require("request");
 var app = require("express")();
 var makeFile = require("./makeFile")();
 var crawling = require("./crawling")();
+var papago = require("./papago")();
 
 var client_id = "";
 var client_secret = "";
@@ -23,8 +24,10 @@ module.exports = function () {
 					for(var index = 0; index < items.length; index++) {
 						var searchResult = items[index];
 						if(searchResult.link.indexOf("=48") !== -1) {
-							makeFile.makeFile(searchData, __dirname + "/results/" + fileInfo.dirName, fileInfo.name + ".json");
-							crawling.foodSearch(searchData.description);
+//							makeFile.makeFile(searchData, __dirname + "/results/" + fileInfo.dirName, fileInfo.name + ".json");
+//							crawling.foodSearch(searchData.description);
+							
+							papago.translateToKo(searchData, fileInfo);
 							break;
 						}
 					}

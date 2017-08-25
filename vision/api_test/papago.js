@@ -1,6 +1,8 @@
 var request = require("request");
 var app = require("express")();
-var isFoodCheck = require("./isFoodCheck")();
+//var isFoodCheck = require("./isFoodCheck")();
+var mysql = require("./mysql")();
+var crawling2 = require("./crawling2")();
 
 var client_id = "";
 var client_secret = "";
@@ -25,8 +27,12 @@ module.exports = function () {
 			request.post(options, function (error, response, body) {
 				if (!error && response.statusCode === 200) {
 					var translatedText = JSON.parse(body).message.result.translatedText;
-					label.description = translatedText;
-					isFoodCheck.foodCheck(label, foodImage);
+//					label.description = translatedText;
+//					isFoodCheck.foodCheck(label, foodImage);
+					
+					console.log("번역 결과 : " + label.description + " => " + translatedText);
+					crawling2.foodSearch(translatedText);
+//					mysql.updateFood(label.description, translatedText);
 				} else {
 					console.log("error = " + response.statusCode);
 				}
